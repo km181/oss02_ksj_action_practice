@@ -1,0 +1,32 @@
+#action.yaml
+name: 'Custom GitHub Action'
+description: 'A GitHub Action htat takes an input and retruns the square of the number'
+inputs:
+  num:
+  description: 'Enter a number'
+  required: true
+  defualt: "1"
+outputs:
+  num_sqared:
+    description: 'Square of the input'
+    # need to specify the extra value' field for 'composite' actions
+    value: ${{ }}
+runs:
+  using: 'composite'
+  steps:
+    -name: Install python
+     uses: actions/setup-python@v4
+     with: 
+     python-version: '3.10'
+    -name: Install dependencies
+     run: pip install -r -requirements.txt
+     shell: bash
+    -name: Pass Inputs to Shell
+     run: |
+      echo "INPUT)NUM-${{ inputs.num }}" >> $GITHUB_ENV
+     shell: bash
+    -name: Fetch the number's square
+     id: get-square
+     run: python src/get_num_square.py
+     shell: bash
+      
